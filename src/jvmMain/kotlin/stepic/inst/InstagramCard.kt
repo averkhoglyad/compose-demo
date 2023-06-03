@@ -42,9 +42,24 @@ fun InstagramCard() {
         border = BorderStroke(1.dp, Color.Gray),
         elevation = 10.dp
     ) {
-        Column {
+        Column(modifier = Modifier.padding(16.dp)) {
             CardHeader()
-            CardFooter()
+            Text(
+                text = "Instagram",
+                fontSize = 32.sp,
+                fontFamily = FontFamily.Cursive
+            )
+            Text(
+                text = "#HashTag",
+                fontSize = 14.sp
+            )
+            Text(
+                text = "https://some.url",
+                fontSize = 14.sp
+            )
+            Button(::noop) {
+                Text("Follow")
+            }
         }
     }
 }
@@ -53,8 +68,7 @@ fun InstagramCard() {
 private fun CardHeader() {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(5.dp),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -63,38 +77,25 @@ private fun CardHeader() {
         UserMetric(
             value = 6950,
             title = "Posts",
-            modifier = Modifier.fillMaxWidth().weight(1F).padding(5.dp)
+            modifier = Modifier
+                .weight(1F)
+                .padding(5.dp)
         )
         UserMetric(
             value = 4361234,
             title = "Followers",
-            modifier = Modifier.fillMaxWidth().weight(1F).padding(5.dp)
+            modifier = Modifier
+                .weight(1F)
+                .padding(5.dp)
         )
         UserMetric(
             value = 76,
             title = "Following",
-            modifier = Modifier.fillMaxWidth().weight(1F).padding(5.dp)
+            modifier = Modifier
+                .weight(1F)
+                .padding(5.dp)
         )
     }
-}
-
-@Composable
-private fun CardFooter() {
-    Column(modifier = Modifier.padding(10.dp)) {
-        Text(
-            text = "Instagram",
-            fontSize = 24.sp,
-            fontFamily = FontFamily.Cursive
-        )
-        Text("#HashTag")
-        Text("https://some.url")
-        Button(::onFollowClick) {
-            Text("Follow")
-        }
-    }
-}
-
-private fun onFollowClick() {
 }
 
 @Composable
@@ -137,3 +138,5 @@ private fun stringify(value: Int): String = when {
     (value < 1_000_000_000) -> "%dM".format(value / 1_000_000)
     else -> "%dG".format(value / 1_000_000_000)
 }
+
+private fun noop() {}
