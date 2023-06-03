@@ -4,7 +4,6 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -100,19 +99,15 @@ private fun onFollowClick() {
 
 @Composable
 private fun Logo(modifier: Modifier = Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
+    Image(
+        painter = painterResource("inst/instagram-icon.png"),
+        contentDescription = "Instagram Logo",
         modifier = modifier
-            .padding(5.dp)
-    ) {
-        Image(
-            painter = painterResource("inst/instagram-icon.png"),
-            contentDescription = "Instagram Logo",
-            modifier = Modifier
-                .size(50.dp)
-                .clip(CircleShape)
-        )
-    }
+            .size(60.dp)
+            .clip(CircleShape)
+            .background(Color.White)
+            .padding(3.dp)
+    )
 }
 
 @Composable
