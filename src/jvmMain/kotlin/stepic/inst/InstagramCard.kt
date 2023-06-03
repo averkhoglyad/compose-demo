@@ -6,15 +6,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 @Preview
@@ -39,66 +40,67 @@ fun InstagramCard() {
         elevation = 10.dp
     ) {
         Column {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, MaterialTheme.colors.secondary)
-                    .padding(5.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(100.dp)
-                        .padding(5.dp)
-                ) {
-                    Img()
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1F)
-                        .padding(5.dp)
-                ) {
-                    Metric(value = 6950, text = "Posts", modifier = Modifier.fillMaxWidth())
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1F).padding(5.dp)
-                ) {
-                    Metric(value = 436, text = "Followers", modifier = Modifier.fillMaxWidth())
-                }
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                        .weight(1F)
-                        .padding(5.dp)
-                ) {
-                    Metric(value = 76, text = "Following", modifier = Modifier.fillMaxWidth())
-                }
-            }
-            Column(modifier = Modifier.padding(10.dp)) {
-                Text("Instagram")
-                Text("#HashTag")
-                Text("https://some.url")
-                Button({}) {
-                    Text("Follow")
-                }
-            }
+            CardHeader()
+            CardFooter()
         }
     }
+}
+
+@Composable
+private fun CardHeader() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, MaterialTheme.colors.secondary)
+            .padding(5.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Img()
+
+        UserMetric(
+            value = 6950,
+            title = "Posts",
+            modifier = Modifier.fillMaxWidth().weight(1F).padding(5.dp)
+        )
+        UserMetric(
+            value = 4361234,
+            title = "Followers",
+            modifier = Modifier.fillMaxWidth().weight(1F).padding(5.dp)
+        )
+        UserMetric(
+            value = 76,
+            title = "Following",
+            modifier = Modifier.fillMaxWidth().weight(1F).padding(5.dp)
+        )
+    }
+}
+
+@Composable
+private fun CardFooter() {
+    Column(modifier = Modifier.padding(10.dp)) {
+        Text(text = "Instagram", fontSize = 24.sp, fontFamily = FontFamily.Cursive)
+        Text(text = "#HashTag")
+        Text(text = "https://some.url")
+        Button(onClick = ::onFollowClick) {
+            Text(text = "Follow")
+        }
+    }
+}
+
+private fun onFollowClick() {
 }
 
 @Composable
 private fun Img(modifier: Modifier = Modifier) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.width(70.dp)
+        modifier = modifier
             .border(1.dp, MaterialTheme.colors.secondary)
             .padding(5.dp)
     ) {
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .background(Color.Magenta)
                 .size(50.dp)
         )
@@ -106,14 +108,33 @@ private fun Img(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Metric(value: Int, text: String, modifier: Modifier = Modifier) {
+private fun UserMetric(value: Int, title: String, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .fillMaxWidth()
+            .padding(5.dp)
             .border(1.dp, MaterialTheme.colors.secondary)
             .padding(5.dp)
     ) {
-        Text(value.toString())
-        Text(text)
+        Text(
+            text = stringify(value),
+            fontSize = 24.sp,
+            fontStyle = FontStyle.Italic,
+            fontFamily = FontFamily.Cursive
+        )
+        Text(
+            text = title,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+private fun stringify(value: Int): String {
+    return when {
+        (value < 1_000) -> "%d".format(value)
+        (value < 1_000_000) -> "%dK".format(value / 1_000)
+        (value < 1_000_000_000) -> "%dM".format(value / 1_000_000)
+        else -> "%dG".format(value / 1_000_000_000)
     }
 }
