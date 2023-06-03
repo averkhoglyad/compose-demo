@@ -19,10 +19,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 @Preview
 fun InstagramCardPreview() {
-    MaterialTheme {
+    InstProjectTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.colors.background)
                 .padding(10.dp)
         ) {
             InstagramCard()
@@ -41,7 +42,7 @@ fun InstagramCard() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, Color.Cyan)
+                    .border(1.dp, MaterialTheme.colors.secondary)
                     .padding(5.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
@@ -76,14 +77,12 @@ fun InstagramCard() {
                     Metric(value = 76, text = "Following", modifier = Modifier.fillMaxWidth())
                 }
             }
-            Row {
-                Column {
-                    Text("Instagram")
-                    Text("#HashTag")
-                    Text("https://some.url")
-                    Button({}) {
-                        Text("Follow")
-                    }
+            Column(modifier = Modifier.padding(10.dp)) {
+                Text("Instagram")
+                Text("#HashTag")
+                Text("https://some.url")
+                Button({}) {
+                    Text("Follow")
                 }
             }
         }
@@ -95,7 +94,7 @@ private fun Img(modifier: Modifier = Modifier) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.width(70.dp)
-            .border(1.dp, Color.Cyan)
+            .border(1.dp, MaterialTheme.colors.secondary)
             .padding(5.dp)
     ) {
         Box(
@@ -111,7 +110,7 @@ private fun Metric(value: Int, text: String, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .border(1.dp, Color.Cyan)
+            .border(1.dp, MaterialTheme.colors.secondary)
             .padding(5.dp)
     ) {
         Text(value.toString())
