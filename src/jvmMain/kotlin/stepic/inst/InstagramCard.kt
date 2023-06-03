@@ -2,15 +2,19 @@ package stepic.inst
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -51,12 +55,11 @@ private fun CardHeader() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colors.secondary)
             .padding(5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        Img()
+        Logo()
 
         UserMetric(
             value = 6950,
@@ -79,11 +82,15 @@ private fun CardHeader() {
 @Composable
 private fun CardFooter() {
     Column(modifier = Modifier.padding(10.dp)) {
-        Text(text = "Instagram", fontSize = 24.sp, fontFamily = FontFamily.Cursive)
-        Text(text = "#HashTag")
-        Text(text = "https://some.url")
-        Button(onClick = ::onFollowClick) {
-            Text(text = "Follow")
+        Text(
+            text = "Instagram",
+            fontSize = 24.sp,
+            fontFamily = FontFamily.Cursive
+        )
+        Text("#HashTag")
+        Text("https://some.url")
+        Button(::onFollowClick) {
+            Text("Follow")
         }
     }
 }
@@ -92,17 +99,18 @@ private fun onFollowClick() {
 }
 
 @Composable
-private fun Img(modifier: Modifier = Modifier) {
+private fun Logo(modifier: Modifier = Modifier) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .border(1.dp, MaterialTheme.colors.secondary)
             .padding(5.dp)
     ) {
-        Box(
+        Image(
+            painter = painterResource("inst/instagram-icon.png"),
+            contentDescription = "Instagram Logo",
             modifier = Modifier
-                .background(Color.Magenta)
                 .size(50.dp)
+                .clip(CircleShape)
         )
     }
 }
@@ -113,9 +121,7 @@ private fun UserMetric(value: Int, title: String, modifier: Modifier = Modifier)
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
-            .padding(5.dp)
-            .border(1.dp, MaterialTheme.colors.secondary)
-            .padding(5.dp)
+            .padding(10.dp)
     ) {
         Text(
             text = stringify(value),
@@ -130,11 +136,9 @@ private fun UserMetric(value: Int, title: String, modifier: Modifier = Modifier)
     }
 }
 
-private fun stringify(value: Int): String {
-    return when {
-        (value < 1_000) -> "%d".format(value)
-        (value < 1_000_000) -> "%dK".format(value / 1_000)
-        (value < 1_000_000_000) -> "%dM".format(value / 1_000_000)
-        else -> "%dG".format(value / 1_000_000_000)
-    }
+private fun stringify(value: Int): String = when {
+    (value < 1_000) -> "%d".format(value)
+    (value < 1_000_000) -> "%dK".format(value / 1_000)
+    (value < 1_000_000_000) -> "%dM".format(value / 1_000_000)
+    else -> "%dG".format(value / 1_000_000_000)
 }
