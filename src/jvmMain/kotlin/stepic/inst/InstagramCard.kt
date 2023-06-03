@@ -1,10 +1,14 @@
-package stepic
+package stepic.inst
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,22 +19,23 @@ import androidx.compose.ui.unit.dp
 @Composable
 @Preview
 fun InstagramCardPreview() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(5.dp)
-    ) {
-        InstagramCard()
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp)
+        ) {
+            InstagramCard()
+        }
     }
 }
 
 @Composable
 fun InstagramCard() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(width = 1.dp, Color.DarkGray)
-            .padding(5.dp)
+    Card(
+        shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp),
+        border = BorderStroke(1.dp, Color.Gray),
+        elevation = 10.dp
     ) {
         Column {
             Row(
