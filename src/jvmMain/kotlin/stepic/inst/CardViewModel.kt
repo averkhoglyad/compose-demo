@@ -8,11 +8,9 @@ import androidx.compose.runtime.setValue
 class CardViewModel {
 
     private val _isFollowingState = mutableStateOf(false)
-
+    val isFollowingState: State<Boolean> = _isFollowingState
     var isFollowing by _isFollowingState
         private set
-
-    var isFollowingState: State<Boolean> = _isFollowingState
 
     fun toggleFollowingState() {
         isFollowing = !isFollowing

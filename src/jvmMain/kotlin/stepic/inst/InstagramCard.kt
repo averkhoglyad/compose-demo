@@ -138,20 +138,3 @@ private fun stringify(value: Int): String = when {
     (value < 1_000_000_000) -> "%dM".format(value / 1_000_000)
     else -> "%dG".format(value / 1_000_000_000)
 }
-
-fun main() = application {
-    val card = CardViewModel()
-
-    Window(onCloseRequest = ::exitApplication) {
-        InstProjectTheme {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.background)
-                    .padding(10.dp)
-            ) {
-                InstagramCard(card)
-            }
-        }
-    }
-}
