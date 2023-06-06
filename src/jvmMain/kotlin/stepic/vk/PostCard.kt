@@ -1,8 +1,7 @@
 package stepic.vk
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -18,58 +17,74 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
+import androidx.compose.ui.unit.sp
+import stepic.vk.data.MetricItem
+import stepic.vk.data.MetricType
+import stepic.vk.data.VkPost
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+
+private val publishTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
 @Composable
-@Preview
-fun PostCardPreview() {
-    VkProjectTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background)
-                .padding(10.dp)
-        ) {
-            PostCard()
-        }
-    }
-}
-
-@Composable
-fun PostCard() {
-    Card {
+fun PostCard(post: VkPost,
+             modifier: Modifier = Modifier,
+             onViewsClick: (MetricItem) -> Unit = {},
+             onLikeClick: (MetricItem) -> Unit = {},
+             onSharesClick: (MetricItem) -> Unit = {},
+             onCommentsClick: (MetricItem) -> Unit = {}) {
+    Card(
+        modifier = modifier
+    ) {
         Column(
             modifier = Modifier
                 .padding(10.dp)
         ) {
-            Header(modifier = Modifier.padding(bottom = 8.dp))
+            Header(
+                post = post,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
 
             Text(
-                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                text = post.contentText,
                 textAlign = TextAlign.Justify,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
+
             Image(
-                painter = painterResource("/vk/post-img.jpg"),
+                painter = painterResource(post.contentImage.toString()),
                 contentDescription = "",
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
                 contentScale = ContentScale.FillWidth
             )
 
-            Footer()
+            Footer(
+                metrics = post.metrics,
+                modifier = Modifier.padding(top = 15.dp),
+                onItemClick = {
+                    when (it.type) {
+                        MetricType.VIEWS -> onViewsClick(it)
+                        MetricType.COMMENTS -> onCommentsClick(it)
+                        MetricType.SHARES -> onSharesClick(it)
+                        MetricType.LIKES -> onLikeClick(it)
+                    }
+                }
+            )
         }
     }
 }
 
 @Composable
-private fun Header(modifier: Modifier = Modifier) {
+private fun Header(post: VkPost,
+                   modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.fillMaxWidth()
     ) {
         Image(
-            painter = painterResource("/vk/dev-null.jpg"),
+            painter = painterResource(post.avatar.toString()),
             contentDescription = "Avatar",
             modifier = Modifier
                 .clip(CircleShape)
@@ -82,13 +97,13 @@ private fun Header(modifier: Modifier = Modifier) {
                 .padding(start = 5.dp, end = 5.dp)
         ) {
             Text(
-                text = "/dev/null",
+                text = post.community,
                 color = MaterialTheme.colors.onPrimary,
                 fontWeight = FontWeight.SemiBold
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "14:00",
+                text = post.publishedAt.atZone(ZoneId.systemDefault()).format(publishTimeFormatter),
                 color = MaterialTheme.colors.onSecondary
             )
         }
@@ -104,40 +119,55 @@ private fun Header(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Footer(modifier: Modifier = Modifier) {
+private fun Footer(metrics: Collection<MetricItem>,
+                   modifier: Modifier = Modifier,
+                   onItemClick: (MetricItem) -> Unit = {}) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Metric(206, Icons.Rounded.Search)
-        Spacer(
-            modifier = Modifier
-                .weight(1F)
-        )
-        Metric(11, Icons.Rounded.Share)
+        Metric(metric = metrics.getByType(MetricType.VIEWS), icon = Icons.Rounded.Search, onMetricClick = onItemClick)
+        Spacer(modifier = Modifier.weight(1F))
+        Metric(metric = metrics.getByType(MetricType.SHARES), icon = Icons.Rounded.Share, onMetricClick = onItemClick)
         Spacer(modifier = Modifier.size(10.dp))
-        Metric(7, Icons.Rounded.Email)
+        Metric(metric = metrics.getByType(MetricType.COMMENTS), icon = Icons.Rounded.Email, onMetricClick = onItemClick)
         Spacer(modifier = Modifier.size(10.dp))
-        Metric(27, Icons.Rounded.Favorite)
+        Metric(metric = metrics.getByType(MetricType.LIKES), icon = Icons.Rounded.Favorite, onMetricClick = onItemClick)
     }
 }
 
-@Composable
-private fun Metric(value: Int, icon: ImageVector, description: String = "") {
-    Text(
-        text = value.toString(),
-        color = MaterialTheme.colors.onSecondary
-    )
-    Spacer(modifier = Modifier.size(2.dp))
-    Icon(
-        imageVector = icon,
-        contentDescription = description,
-        tint = MaterialTheme.colors.onSecondary
-    )
+private fun Collection<MetricItem>.getByType(type: MetricType): MetricItem {
+    return this.find { it.type == type } ?: MetricItem(type, 0)
 }
 
-fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
-        PostCardPreview()
+@Composable
+private fun Metric(metric: MetricItem,
+                   icon: ImageVector,
+                   modifier: Modifier = Modifier,
+                   onMetricClick: (MetricItem) -> Unit = {}) {
+    Metric(value = metric.value, icon = icon, modifier = modifier) { onMetricClick(metric) }
+}
+
+@Composable
+private fun Metric(value: Int,
+                   icon: ImageVector,
+                   description: String = "",
+                   modifier: Modifier = Modifier,
+                   onItemClick: () -> Unit = {}) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.clickable { onItemClick() }
+    ) {
+        Text(
+            text = value.toString(),
+            color = MaterialTheme.colors.onSecondary,
+            fontSize = 14.sp
+        )
+        Spacer(modifier = Modifier.size(2.dp))
+        Icon(
+            imageVector = icon,
+            contentDescription = description,
+            tint = MaterialTheme.colors.onSecondary
+        )
     }
 }
