@@ -1,6 +1,5 @@
 package stepic.inst
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,7 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,24 +18,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 
 @Composable
-@Preview
-fun InstagramCardPreview() {
-    InstProjectTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background)
-                .padding(10.dp)
-        ) {
-            InstagramCard()
-        }
-    }
-}
-
-@Composable
-fun InstagramCard() {
+fun InstagramCard(card: CardViewModel) {
     Card(
         shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp),
         border = BorderStroke(1.dp, Color.Gray),
@@ -57,9 +43,25 @@ fun InstagramCard() {
                 text = "https://some.url",
                 fontSize = 14.sp
             )
-            Button(::noop) {
-                Text("Follow")
-            }
+            FollowButton(card.isFollowing) { card.toggleFollowingState() }
+        }
+    }
+}
+
+@Composable
+private fun FollowButton(isFollowed: Boolean, followToggleHandler: (Boolean) -> Unit) {
+    Button(
+        onClick = {
+            followToggleHandler(!isFollowed)
+        },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = if (isFollowed) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
+        )
+    ) {
+        if (isFollowed) {
+            Text(text = "Unfollow")
+        } else {
+            Text("Follow")
         }
     }
 }
@@ -139,4 +141,19 @@ private fun stringify(value: Int): String = when {
     else -> "%dG".format(value / 1_000_000_000)
 }
 
-private fun noop() {}
+fun main() = application {
+    val card = CardViewModel()
+
+    Window(onCloseRequest = ::exitApplication) {
+        InstProjectTheme {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.background)
+                    .padding(10.dp)
+            ) {
+                InstagramCard(card)
+            }
+        }
+    }
+}
