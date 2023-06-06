@@ -43,22 +43,22 @@ fun InstagramCard(card: CardViewModel) {
                 text = "https://some.url",
                 fontSize = 14.sp
             )
-            FollowButton(card.isFollowing) { card.toggleFollowingState() }
+            FollowButton(card.isFollowingState) { card.toggleFollowingState() }
         }
     }
 }
 
 @Composable
-private fun FollowButton(isFollowed: Boolean, followToggleHandler: (Boolean) -> Unit) {
+private fun FollowButton(isFollowed: State<Boolean>, followToggleHandler: () -> Unit) {
     Button(
         onClick = {
-            followToggleHandler(!isFollowed)
+            followToggleHandler()
         },
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = if (isFollowed) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
+            backgroundColor = if (isFollowed.value) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
         )
     ) {
-        if (isFollowed) {
+        if (isFollowed.value) {
             Text(text = "Unfollow")
         } else {
             Text("Follow")
@@ -76,26 +76,24 @@ private fun CardHeader() {
 
         Logo()
 
+        val metricsModifier = Modifier
+            .weight(1F)
+            .padding(5.dp)
+
         UserMetric(
             value = 6950,
             title = "Posts",
-            modifier = Modifier
-                .weight(1F)
-                .padding(5.dp)
+            modifier = metricsModifier
         )
         UserMetric(
             value = 4361234,
             title = "Followers",
-            modifier = Modifier
-                .weight(1F)
-                .padding(5.dp)
+            modifier = metricsModifier
         )
         UserMetric(
             value = 76,
             title = "Following",
-            modifier = Modifier
-                .weight(1F)
-                .padding(5.dp)
+            modifier = metricsModifier
         )
     }
 }
