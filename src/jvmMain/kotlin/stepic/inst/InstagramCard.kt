@@ -18,11 +18,10 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
 
 @Composable
-fun InstagramCard(card: CardViewModel) {
+fun InstagramCard(card: InstCard,
+                  onFollowToggle: (InstCard) -> Unit = {}) {
     Card(
         shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp),
         border = BorderStroke(1.dp, Color.Gray),
@@ -31,34 +30,35 @@ fun InstagramCard(card: CardViewModel) {
         Column(modifier = Modifier.padding(16.dp)) {
             CardHeader()
             Text(
-                text = "Instagram",
+                text = "Instagram ${card.id}",
                 fontSize = 32.sp,
                 fontFamily = FontFamily.Cursive
             )
             Text(
-                text = "#HashTag",
+                text = "#${card.title}",
                 fontSize = 14.sp
             )
             Text(
                 text = "https://some.url",
                 fontSize = 14.sp
             )
-            FollowButton(card.isFollowingState) { card.toggleFollowingState() }
+            FollowButton(card.isFollowed) { onFollowToggle(card) }
         }
     }
 }
 
 @Composable
-private fun FollowButton(isFollowed: State<Boolean>, followToggleHandler: () -> Unit) {
+private fun FollowButton(isFollowed: Boolean,
+                         onFollowToggle: () -> Unit) {
     Button(
         onClick = {
-            followToggleHandler()
+            onFollowToggle()
         },
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = if (isFollowed.value) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
+            backgroundColor = if (isFollowed) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
         )
     ) {
-        if (isFollowed.value) {
+        if (isFollowed) {
             Text(text = "Unfollow")
         } else {
             Text("Follow")
