@@ -1,20 +1,24 @@
 package stepic.vk.model
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import stepic.vk.data.MetricItem
 import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
+import stepic.vk.immutable
 import java.net.URI
 import java.time.Instant
 import kotlin.random.Random
 
-class FeedViewModel(count: Int = 3) {
+class VkViewModel(count: Int = 3) {
 
     private val _postsState = mutableStateOf(emptyList<VkPost>())
-    val postsState: State<List<VkPost>> = _postsState
+    val postsState = _postsState.immutable()
     val posts: List<VkPost> by _postsState
+
+    private val _currentNavItemState = mutableStateOf(BottomNavItems.HOME)
+    val currentNavItemState = _currentNavItemState.immutable()
+    val currentNavItem by currentNavItemState
 
     init {
         var inc = 0
@@ -36,6 +40,10 @@ class FeedViewModel(count: Int = 3) {
         }
             .take(count)
             .toList()
+    }
+
+    fun selectNavItem(navItem: NavItem) {
+        this._currentNavItemState.value = navItem as BottomNavItems
     }
 
     fun incMetric(target: VkPost, metricType: MetricType) {

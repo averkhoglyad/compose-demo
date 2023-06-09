@@ -1,4 +1,4 @@
-package stepic.vk
+package stepic.vk.layout.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

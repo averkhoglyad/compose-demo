@@ -1,4 +1,4 @@
-package stepic.vk
+package stepic.vk.layout
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
