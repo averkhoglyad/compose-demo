@@ -30,4 +30,9 @@ class InstViewModel {
         _cardsState.value = list
     }
 
+    fun remove(card: InstCard) {
+        val list = _cardsState.value.toMutableList()
+        list.remove(card)
+        _cardsState.value = list
+    }
 }

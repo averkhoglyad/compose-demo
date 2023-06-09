@@ -21,13 +21,15 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun InstagramCard(card: InstCard,
+                  modifier: Modifier = Modifier,
                   onFollowToggle: (InstCard) -> Unit = {}) {
     Card(
         shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp),
         border = BorderStroke(1.dp, Color.Gray),
-        elevation = 10.dp
+        elevation = 10.dp,
+        modifier = modifier
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = modifier.padding(16.dp)) {
             CardHeader()
             Text(
                 text = "Instagram ${card.id}",
