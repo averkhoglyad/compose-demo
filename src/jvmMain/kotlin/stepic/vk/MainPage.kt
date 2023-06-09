@@ -1,37 +1,67 @@
 package stepic.vk
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import stepic.vk.data.MetricItem
-import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
 import stepic.vk.model.FeedViewModel
-import java.net.URI
-import java.time.Instant
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun MainPage(postModel: FeedViewModel) {
+fun MainPage(feedViewModel: FeedViewModel) {
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+            .padding(10.dp),
         bottomBar = { bottomNavigation() },
     ) {
-        PostCard(
-            post = postModel.post,
-            modifier = Modifier.padding(8.dp),
-            onViewsClick = postModel::incMetric,
-            onCommentsClick = postModel::incMetric,
-            onLikeClick = postModel::incMetric,
-            onSharesClick = postModel::incMetric,
-        )
+        LazyColumn(
+            contentPadding = PaddingValues(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 72.dp),
+            verticalArrangement = spacedBy(8.dp),
+            modifier = Modifier.padding(it)
+        ) {
+            items(items = feedViewModel.posts, key = VkPost::id) { post ->
+                val dismissState = rememberDismissState()
+                if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                    feedViewModel.drop(post)
+                }
+
+                SwipeToDismiss(
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart),
+                    modifier = Modifier.animateItemPlacement(),
+                    background = {}
+                ) {
+                    PostCard(
+                        post = post,
+                        onViewsClick = { feedViewModel.incMetric(post, it.type) },
+                        onCommentsClick = { feedViewModel.incMetric(post, it.type) },
+                        onLikeClick = { feedViewModel.incMetric(post, it.type) },
+                        onSharesClick = { feedViewModel.incMetric(post, it.type) },
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -75,23 +105,9 @@ enum class BottomNavItems(
 }
 
 fun main() = application {
-    val postModel = FeedViewModel(VkPost(
-        community = "/dev/null",
-        avatar = URI("/vk/dev-null.jpg"),
-        contentText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        contentImage = URI("/vk/post-img.jpg"),
-        publishedAt = Instant.now(),
-        metrics = listOf(
-            MetricItem(MetricType.LIKES, 12),
-            MetricItem(MetricType.VIEWS, 628),
-            MetricItem(MetricType.SHARES, 112),
-            MetricItem(MetricType.COMMENTS, 29),
-        )
-    ))
-
     Window(onCloseRequest = ::exitApplication) {
         VkProjectTheme {
-            MainPage(postModel)
+            MainPage(FeedViewModel(7))
         }
     }
 }

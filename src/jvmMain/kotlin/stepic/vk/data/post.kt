@@ -3,7 +3,8 @@ package stepic.vk.data
 import java.net.URI
 import java.time.Instant
 
-data class VkPost(val community: String,
+data class VkPost(val id: Int,
+                  val community: String,
                   val avatar: URI,
                   val publishedAt: Instant,
                   val contentText: String,
