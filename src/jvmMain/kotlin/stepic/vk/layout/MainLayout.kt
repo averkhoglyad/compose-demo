@@ -1,49 +1,54 @@
 package stepic.vk.layout
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import stepic.vk.layout.component.TextCountable
-import stepic.vk.layout.view.FavoritesView
-import stepic.vk.layout.view.HomeView
-import stepic.vk.layout.view.ProfileView
-import stepic.vk.model.BottomNavItems
-import stepic.vk.model.NavItem
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.CurrentScreen
+import cafe.adriel.voyager.navigator.Navigator
+import stepic.vk.navigation.BottomNavItems
 import stepic.vk.model.VkViewModel
+import stepic.vk.navigation.FeedScreen
 
 @Composable
 fun MainLayout(viewModel: VkViewModel) {
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.background)
-            .padding(10.dp),
-        bottomBar = {
-            BottomNavigationMenu(viewModel.currentNavItemState, viewModel::selectNavItem)
-        },
-    ) { paddingValues ->
-        val modifier = Modifier.padding(paddingValues).padding(5.dp).padding(bottom = 10.dp)
-        when (viewModel.currentNavItem) {
-            BottomNavItems.HOME -> HomeView(viewModel, modifier = modifier)
-            BottomNavItems.FAVORITE -> FavoritesView(modifier = modifier)
-            BottomNavItems.PROFILE -> ProfileView(modifier = modifier)
+    Navigator(FeedScreen(viewModel)) { navigator ->
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.background)
+                .padding(10.dp),
+            bottomBar = {
+                BottomNavigationMenu(viewModel, navigator.lastItem) { next ->
+                    navigator.popUntilRoot()
+                    if (navigator.lastItem.key != next.key) {
+                        navigator.push(next)
+                    }
+                }
+            },
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier.padding(paddingValues).padding(5.dp).padding(bottom = 10.dp)
+            ) {
+                CurrentScreen()
+            }
         }
     }
 }
 
 @Composable
-private fun BottomNavigationMenu(currentNavItemState: State<NavItem>, onNavItemClick: (NavItem) -> Unit = {}) {
+private fun BottomNavigationMenu(viewModel: VkViewModel, currentScreen: Screen, onNavItemClick: (Screen) -> Unit = {}) {
     BottomNavigation {
         BottomNavItems.values()
             .forEach {
                 BottomNavigationItem(
-                    selected = it == currentNavItemState.value,
-                    onClick = { onNavItemClick(it) },
+                    selected = currentScreen::class == it.screenType,
+                    onClick = { onNavItemClick(it.screen(viewModel)) },
                     icon = {
                         Icon(imageVector = it.icon, contentDescription = it.title)
                     },

@@ -13,12 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import stepic.vk.data.VkPost
 import stepic.vk.layout.component.PostCard
-import stepic.vk.layout.component.TextCountable
 import stepic.vk.model.VkViewModel
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun HomeView(viewModel: VkViewModel,
+fun FeedView(viewModel: VkViewModel,
              contentPadding: PaddingValues = PaddingValues(0.dp),
              modifier: Modifier = Modifier) {
     LazyColumn(
