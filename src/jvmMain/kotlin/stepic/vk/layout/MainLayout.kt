@@ -14,26 +14,28 @@ import cafe.adriel.voyager.navigator.Navigator
 import stepic.vk.navigation.BottomNavItems
 import stepic.vk.model.VkViewModel
 import stepic.vk.navigation.FeedScreen
+import stepic.vk.navigation.rememberNavState
 
 @Composable
 fun MainLayout(viewModel: VkViewModel) {
     Navigator(FeedScreen(viewModel)) { navigator ->
+        val navState = rememberNavState(navigator)
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
                 .padding(10.dp),
             bottomBar = {
-                BottomNavigationMenu(viewModel, navigator.lastItem) { next ->
-                    navigator.popUntilRoot()
-                    if (navigator.lastItem.key != next.key) {
-                        navigator.push(next)
-                    }
+                BottomNavigationMenu(viewModel, navState.current) {
+                    navState.goTo(it)
                 }
             },
         ) { paddingValues ->
             Box(
-                modifier = Modifier.padding(paddingValues).padding(5.dp).padding(bottom = 10.dp)
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(5.dp)
+                    .padding(bottom = 10.dp)
             ) {
                 CurrentScreen()
             }
