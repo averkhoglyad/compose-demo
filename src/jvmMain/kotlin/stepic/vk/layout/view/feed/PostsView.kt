@@ -1,4 +1,5 @@
-package stepic.vk.layout.view
+package stepic.vk.layout.view.feed
+
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,28 +11,16 @@ import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import stepic.vk.data.VkPostComment
 import stepic.vk.data.VkPost
 import stepic.vk.layout.component.PostCard
-import stepic.vk.model.VkViewModel
-
-@Composable
-fun FeedView(viewModel: VkViewModel,
-             modifier: Modifier = Modifier) {
-    when (val state = viewModel.feedScreen) {
-        is ScreenState.PostsFeed ->
-            FeedPost(state.posts, viewModel, modifier)
-        is ScreenState.CommentsList ->
-            CommentsView(state.post, state.comments, modifier, onBackClick = viewModel::closeComments)
-        is ScreenState.None -> {}
-    }
-}
+import stepic.vk.model.PostsFeedViewModel
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-private fun FeedPost(posts: List<VkPost>,
-                     viewModel: VkViewModel,
-                     modifier: Modifier = Modifier) {
+fun FeedPost(posts: List<VkPost>,
+             viewModel: PostsFeedViewModel,
+             modifier: Modifier = Modifier,
+             onShowCommentsClick: (VkPost) -> Unit) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -51,21 +40,11 @@ private fun FeedPost(posts: List<VkPost>,
                 PostCard(
                     post = post,
                     onViewsClick = { viewModel.incMetric(post, it.type) },
-                    onCommentsClick = { viewModel.showComments(post) },
+                    onCommentsClick = { onShowCommentsClick(post) },
                     onLikeClick = { viewModel.incMetric(post, it.type) },
                     onSharesClick = { viewModel.incMetric(post, it.type) },
                 )
             }
         }
     }
-}
-
-sealed class ScreenState {
-
-    object None : ScreenState()
-
-    data class PostsFeed(val posts: List<VkPost>) : ScreenState()
-
-    data class CommentsList(val post: VkPost, val comments: List<VkPostComment>) : ScreenState()
-
 }

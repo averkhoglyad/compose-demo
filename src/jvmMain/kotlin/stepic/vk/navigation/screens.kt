@@ -1,20 +1,24 @@
 package stepic.vk.navigation
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import stepic.vk.data.VkPost
 import stepic.vk.layout.view.FavoritesView
-import stepic.vk.layout.view.FeedView
+import stepic.vk.layout.view.HomeView
 import stepic.vk.layout.view.ProfileView
-import stepic.vk.model.VkViewModel
+import stepic.vk.layout.view.feed.CommentsView
 
-data class FeedScreen(val viewModel: VkViewModel) : ModifiableScreen() {
+class HomeScreen : ModifiableScreen() {
 
-    override val key = "FeedScreen"
+    override val key = "HomeScreen"
 
     @Composable
     override fun Content() {
-        FeedView(viewModel, modifier = this.modifier)
+        var selectedPost by remember { mutableStateOf<VkPost?>(null) }
+        selectedPost
+            ?.let { CommentsView(it, modifier = this.modifier, onBackClick = { selectedPost = null }) }
+            ?: HomeView(modifier = this.modifier, onShowCommentsClick = { selectedPost = it })
     }
 }
 

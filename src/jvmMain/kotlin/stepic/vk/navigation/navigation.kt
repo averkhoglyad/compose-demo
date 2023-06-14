@@ -6,11 +6,9 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
-import stepic.vk.model.VkViewModel
 import kotlin.reflect.KClass
 
 interface NavItem<T: Screen> {
@@ -18,20 +16,20 @@ interface NavItem<T: Screen> {
     val icon: ImageVector
     val screenType: KClass<out T>
 
-    fun screen(viewModel: VkViewModel): T
+    fun screen(): T
 }
 
 enum class BottomNavItems(override val title: String,
                           override val icon: ImageVector,
                           override val screenType: KClass<out Screen>) : NavItem<Screen> {
-    HOME(title = "Home", icon = Icons.Default.Home, screenType = FeedScreen::class) {
-        override fun screen(viewModel: VkViewModel): Screen = FeedScreen(viewModel)
+    HOME(title = "Home", icon = Icons.Default.Home, screenType = HomeScreen::class) {
+        override fun screen(): Screen = HomeScreen()
     },
     FAVORITE(title = "Favorite", icon = Icons.Default.Favorite, screenType = FavoritesScreen::class) {
-        override fun screen(viewModel: VkViewModel): Screen = FavoritesScreen
+        override fun screen(): Screen = FavoritesScreen
     },
     PROFILE(title = "Profile", icon = Icons.Default.Person, screenType = ProfileScreen::class) {
-        override fun screen(viewModel: VkViewModel): Screen = ProfileScreen
+        override fun screen(): Screen = ProfileScreen
     }
 }
 
