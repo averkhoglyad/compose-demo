@@ -21,10 +21,8 @@ import androidx.compose.ui.unit.sp
 import stepic.vk.data.MetricItem
 import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
+import stepic.vk.data.TIME_FORMATTER
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-
-private val publishTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
 @Composable
 fun PostCard(post: VkPost,
@@ -103,7 +101,7 @@ private fun Header(post: VkPost,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = post.publishedAt.atZone(ZoneId.systemDefault()).format(publishTimeFormatter),
+                text = post.publishedAt.atZone(ZoneId.systemDefault()).format(TIME_FORMATTER),
                 color = MaterialTheme.colors.onSecondary
             )
         }

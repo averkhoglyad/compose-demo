@@ -10,10 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
+import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import stepic.vk.navigation.BottomNavItems
 import stepic.vk.model.VkViewModel
 import stepic.vk.navigation.FeedScreen
+import stepic.vk.navigation.ModifiableScreen
 import stepic.vk.navigation.rememberNavState
 
 @Composable
@@ -23,22 +26,18 @@ fun MainLayout(viewModel: VkViewModel) {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background)
-                .padding(10.dp),
+                .background(MaterialTheme.colors.background),
             bottomBar = {
                 BottomNavigationMenu(viewModel, navState.current) {
                     navState.goTo(it)
                 }
             },
         ) { paddingValues ->
-            Box(
-                modifier = Modifier
+            CurrentScreen(Modifier
                     .padding(paddingValues)
-                    .padding(5.dp)
+                    .padding(15.dp)
                     .padding(bottom = 10.dp)
-            ) {
-                CurrentScreen()
-            }
+            )
         }
     }
 }
@@ -62,4 +61,12 @@ private fun BottomNavigationMenu(viewModel: VkViewModel, currentScreen: Screen, 
                 )
             }
     }
+}
+
+@Composable
+private fun CurrentScreen(modifier: Modifier) {
+    val navigator = LocalNavigator.currentOrThrow
+    val currentScreen = navigator.lastItem as? ModifiableScreen
+    currentScreen?.modifier = modifier
+    CurrentScreen()
 }
