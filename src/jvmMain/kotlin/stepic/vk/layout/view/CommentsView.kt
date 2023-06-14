@@ -10,18 +10,19 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import stepic.vk.data.PostComment
+import stepic.vk.data.VkPost
+import stepic.vk.data.VkPostComment
 import stepic.vk.layout.component.CommentItem
-import stepic.vk.model.CommentsModel
 
 @Composable
-fun CommentsView(viewModel: CommentsModel,
+fun CommentsView(post: VkPost,
+                 comments: List<VkPostComment>,
                  modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Comments for Post #${viewModel.post?.id}")
+                    Text("Comments for Post #${post.id}")
                 },
                 navigationIcon = {
                     IconButton(onClick = {}) {
@@ -39,7 +40,7 @@ fun CommentsView(viewModel: CommentsModel,
             modifier = modifier
                 .padding(padding)
         ) {
-            items(items = viewModel.comments, key = PostComment::id) {
+            items(items = comments, key = VkPostComment::id) {
                 CommentItem(it)
             }
         }

@@ -11,12 +11,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import stepic.vk.data.PostComment
+import stepic.vk.data.VkPostComment
 import stepic.vk.data.TIME_FORMATTER
 import java.time.ZoneId
 
 @Composable
-fun CommentItem(comment: PostComment,
+fun CommentItem(comment: VkPostComment,
                 modifier: Modifier = Modifier) {
     Row(
         modifier = modifier

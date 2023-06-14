@@ -1,11 +1,13 @@
 package stepic.vk.model
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import stepic.vk.data.MetricItem
 import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
 import stepic.vk.immutable
+import stepic.vk.layout.view.ScreenState
 import stepic.vk.navigation.BottomNavItems
 import stepic.vk.navigation.NavItem
 import java.net.URI
@@ -17,6 +19,10 @@ class VkViewModel(count: Int = 3) {
     private val _postsState = mutableStateOf(emptyList<VkPost>())
     val postsState = _postsState.immutable()
     val posts: List<VkPost> by _postsState
+
+    private val _feedScreenState = mutableStateOf<ScreenState>(ScreenState.None)
+    val feedScreenState = _feedScreenState.immutable()
+    val feedScreen: ScreenState by _feedScreenState
 
     init {
         var inc = 0
