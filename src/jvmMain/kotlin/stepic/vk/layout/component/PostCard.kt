@@ -134,7 +134,7 @@ private fun Footer(metrics: Collection<MetricItem>,
     }
 }
 
-private fun Collection<MetricItem>.getByType(type: MetricType): MetricItem {
+fun Collection<MetricItem>.getByType(type: MetricType): MetricItem {
     return this.find { it.type == type } ?: MetricItem(type, 0)
 }
 

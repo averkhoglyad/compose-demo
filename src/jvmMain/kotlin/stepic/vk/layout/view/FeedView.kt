@@ -19,8 +19,10 @@ import stepic.vk.model.VkViewModel
 fun FeedView(viewModel: VkViewModel,
              modifier: Modifier = Modifier) {
     when (val state = viewModel.feedScreen) {
-        is ScreenState.PostsFeed -> FeedPost(state.posts, viewModel, modifier)
-        is ScreenState.CommentsList -> CommentsView(state.post, state.comments, modifier)
+        is ScreenState.PostsFeed ->
+            FeedPost(state.posts, viewModel, modifier)
+        is ScreenState.CommentsList ->
+            CommentsView(state.post, state.comments, modifier, onBackClick = viewModel::closeComments)
         is ScreenState.None -> {}
     }
 }
@@ -49,7 +51,7 @@ private fun FeedPost(posts: List<VkPost>,
                 PostCard(
                     post = post,
                     onViewsClick = { viewModel.incMetric(post, it.type) },
-                    onCommentsClick = { viewModel.incMetric(post, it.type) },
+                    onCommentsClick = { viewModel.showComments(post) },
                     onLikeClick = { viewModel.incMetric(post, it.type) },
                     onSharesClick = { viewModel.incMetric(post, it.type) },
                 )

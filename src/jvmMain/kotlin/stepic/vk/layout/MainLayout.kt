@@ -43,7 +43,9 @@ fun MainLayout(viewModel: VkViewModel) {
 }
 
 @Composable
-private fun BottomNavigationMenu(viewModel: VkViewModel, currentScreen: Screen, onNavItemClick: (Screen) -> Unit = {}) {
+private fun BottomNavigationMenu(viewModel: VkViewModel,
+                                 currentScreen: Screen,
+                                 onNavItemClick: (Screen) -> Unit = {}) {
     BottomNavigation {
         BottomNavItems.values()
             .forEach {

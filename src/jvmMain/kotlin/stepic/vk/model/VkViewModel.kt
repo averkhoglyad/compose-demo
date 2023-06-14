@@ -1,32 +1,30 @@
 package stepic.vk.model
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import stepic.vk.data.MetricItem
 import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
+import stepic.vk.data.VkPostComment
 import stepic.vk.immutable
+import stepic.vk.layout.component.getByType
 import stepic.vk.layout.view.ScreenState
-import stepic.vk.navigation.BottomNavItems
-import stepic.vk.navigation.NavItem
 import java.net.URI
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import kotlin.random.Random
 
 class VkViewModel(count: Int = 3) {
-
-    private val _postsState = mutableStateOf(emptyList<VkPost>())
-    val postsState = _postsState.immutable()
-    val posts: List<VkPost> by _postsState
 
     private val _feedScreenState = mutableStateOf<ScreenState>(ScreenState.None)
     val feedScreenState = _feedScreenState.immutable()
     val feedScreen: ScreenState by _feedScreenState
 
+    private var prevFeedScreen: ScreenState = ScreenState.None
+
     init {
         var inc = 0
-        _postsState.value = generateSequence {
+        val posts = generateSequence {
             VkPost(
                 id = ++inc,
                 community = "/dev/null",
@@ -44,13 +42,45 @@ class VkViewModel(count: Int = 3) {
         }
             .take(count)
             .toList()
+
+        _feedScreenState.value = ScreenState.PostsFeed(posts = posts)
+    }
+
+    fun showComments(post: VkPost) {
+        var inc = 0
+        val comments = generateSequence {
+            VkPostComment(
+                id = ++inc,
+                author = "Somebody",
+                authorAvatar = URI("/vk/author-avatar.png"),
+                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+                publishedAt = Instant.now()
+                    .minus(7, ChronoUnit.HOURS)
+                    .plus(3L * inc, ChronoUnit.MINUTES)
+            )
+        }
+            .take(post.metrics.getByType(MetricType.COMMENTS).value)
+            .toList()
+        prevFeedScreen = _feedScreenState.value
+        _feedScreenState.value = ScreenState.CommentsList(post, comments)
+    }
+
+    fun closeComments() {
+        _feedScreenState.value = prevFeedScreen
     }
 
     fun incMetric(target: VkPost, metricType: MetricType) {
-        _postsState.value = _postsState.value.asSequence()
+        val currentFeedScreen = feedScreen
+        if (currentFeedScreen !is ScreenState.PostsFeed) {
+            return
+        }
+
+        val modifiedPosts = currentFeedScreen.posts
+            .asSequence()
             .map { post ->
                 if (post.id == target.id) {
-                    val newMetrics = post.metrics.asSequence()
+                    val newMetrics = post.metrics
+                        .asSequence()
                         .map { if (it.type == metricType) it.copy(value = it.value + 1) else it }
                         .toList()
                     post.copy(metrics = newMetrics)
@@ -59,9 +89,17 @@ class VkViewModel(count: Int = 3) {
                 }
             }
             .toList()
+
+        _feedScreenState.value = currentFeedScreen.copy(posts = modifiedPosts)
     }
 
-    fun drop(post: VkPost) {
-        _postsState.value -= post
+    fun drop(target: VkPost) {
+        val currentFeedScreen = feedScreen
+        if (currentFeedScreen !is ScreenState.PostsFeed) {
+            return
+        }
+
+        val modifiedPosts = currentFeedScreen.posts - target
+        _feedScreenState.value = currentFeedScreen.copy(posts = modifiedPosts)
     }
 }

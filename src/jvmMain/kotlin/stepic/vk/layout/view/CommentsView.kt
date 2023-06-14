@@ -17,7 +17,8 @@ import stepic.vk.layout.component.CommentItem
 @Composable
 fun CommentsView(post: VkPost,
                  comments: List<VkPostComment>,
-                 modifier: Modifier = Modifier) {
+                 modifier: Modifier = Modifier,
+                 onBackClick: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -25,13 +26,14 @@ fun CommentsView(post: VkPost,
                     Text("Comments for Post #${post.id}")
                 },
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back"
                         )
                     }
                 },
+
             )
         }
     ) { padding ->
