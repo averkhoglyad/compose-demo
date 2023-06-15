@@ -8,18 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.CurrentScreen
-import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
 import stepic.vk.navigation.BottomNavItems
+import stepic.vk.navigation.CurrentScreen
 import stepic.vk.navigation.HomeScreen
-import stepic.vk.navigation.ModifiableScreen
 import stepic.vk.navigation.rememberNavState
 
 @Composable
 fun MainLayout() {
-    Navigator(HomeScreen()) { navigator ->
+    Navigator(HomeScreen, disposeBehavior = NavigatorDisposeBehavior(true, true)) { navigator ->
         val navState = rememberNavState(navigator)
         Scaffold(
             modifier = Modifier
@@ -27,7 +25,7 @@ fun MainLayout() {
                 .background(MaterialTheme.colors.background),
             bottomBar = {
                 BottomNavigationMenu(navState.current) {
-                    navState.goTo(it)
+                    navState.goToTab(it)
                 }
             },
         ) { paddingValues ->
@@ -60,12 +58,4 @@ private fun BottomNavigationMenu(currentScreen: Screen,
                 )
             }
     }
-}
-
-@Composable
-private fun CurrentScreen(modifier: Modifier) {
-    val navigator = LocalNavigator.currentOrThrow
-    val currentScreen = navigator.lastItem as? ModifiableScreen
-    currentScreen?.modifier = modifier
-    CurrentScreen()
 }

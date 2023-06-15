@@ -3,26 +3,52 @@ package stepic.vk.navigation
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.CurrentScreen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import stepic.vk.data.VkPost
 import stepic.vk.layout.view.FavoritesView
 import stepic.vk.layout.view.HomeView
 import stepic.vk.layout.view.ProfileView
 import stepic.vk.layout.view.feed.CommentsView
 
-class HomeScreen : ModifiableScreen() {
+object HomeScreen : ModifiableScreen() {
 
     override val key = "HomeScreen"
 
     @Composable
     override fun Content() {
-        var selectedPost by remember { mutableStateOf<VkPost?>(null) }
-        selectedPost
-            ?.let { CommentsView(it, modifier = this.modifier, onBackClick = { selectedPost = null }) }
-            ?: HomeView(modifier = this.modifier, onShowCommentsClick = { selectedPost = it })
+        Navigator(PostsScreen) {
+            CurrentScreen(this.modifier)
+        }
+    }
+}
+
+object PostsScreen : ModifiableScreen() {
+
+    override val key = "HomeScreen > PostsScreen"
+
+    @Composable
+    override fun Content() {
+        val navState = rememberNavState()
+        HomeView(modifier = this.modifier, onShowCommentsClick = { navState.goTo(CommentsScreen(it)) })
+    }
+}
+
+class CommentsScreen(private val post: VkPost) : ModifiableScreen() {
+
+    override val key = "HomeScreen > CommentsScreen"
+
+    @Composable
+    override fun Content() {
+        val navState = rememberNavState()
+        CommentsView(post, modifier = this.modifier, onBackClick = { navState.goBack() })
     }
 }
 
 object FavoritesScreen : ModifiableScreen() {
+
     override val key = "FavoritesScreen"
 
     @Composable
@@ -32,6 +58,7 @@ object FavoritesScreen : ModifiableScreen() {
 }
 
 object ProfileScreen : ModifiableScreen() {
+
     override val key = "ProfileScreen"
 
     @Composable
@@ -45,3 +72,12 @@ abstract class ModifiableScreen : Screen {
     var modifier: Modifier = Modifier
 
 }
+
+@Composable
+fun CurrentScreen(modifier: Modifier) {
+    val navigator = LocalNavigator.currentOrThrow
+    val currentScreen = navigator.lastItem as? ModifiableScreen
+    currentScreen?.modifier = modifier
+    CurrentScreen()
+}
+
