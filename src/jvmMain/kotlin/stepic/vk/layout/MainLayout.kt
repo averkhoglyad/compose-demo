@@ -17,7 +17,7 @@ import stepic.vk.navigation.rememberNavState
 
 @Composable
 fun MainLayout() {
-    Navigator(HomeScreen, disposeBehavior = NavigatorDisposeBehavior(true, true)) { navigator ->
+    Navigator(screen = HomeScreen, disposeBehavior = NavigatorDisposeBehavior(false, false)) { navigator ->
         val navState = rememberNavState(navigator)
         Scaffold(
             modifier = Modifier
@@ -44,9 +44,14 @@ private fun BottomNavigationMenu(currentScreen: Screen,
     BottomNavigation {
         BottomNavItems.values()
             .forEach {
+                val selected = currentScreen::class == it.screenType
                 BottomNavigationItem(
-                    selected = currentScreen::class == it.screenType,
-                    onClick = { onNavItemClick(it.screen()) },
+                    selected = selected,
+                    onClick = {
+                        if (!selected) {
+                            onNavItemClick(it.screen())
+                        }
+                    },
                     icon = {
                         Icon(imageVector = it.icon, contentDescription = it.title)
                     },
