@@ -15,16 +15,16 @@ import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
 import stepic.vk.layout.component.PostCard
 import stepic.vk.model.PostScreenState
-import stepic.vk.model.PostsFeedViewModel
+import stepic.vk.model.PostsViewModel
 
 @Composable
-fun PostsView(viewModel: PostsFeedViewModel,
+fun PostsView(viewModel: PostsViewModel,
               modifier: Modifier = Modifier,
               onShowCommentsClick: (VkPost) -> Unit = {}) {
     when (val state = viewModel.screenState) {
-        PostScreenState.Initial -> {}
+        is PostScreenState.Initial -> {}
         is PostScreenState.Posts ->
-            PostsFeed(
+            PostsList(
                 posts = state.posts,
                 modifier = modifier,
                 onShowCommentsClick = onShowCommentsClick,
@@ -35,7 +35,7 @@ fun PostsView(viewModel: PostsFeedViewModel,
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-private fun PostsFeed(posts: List<VkPost>,
+private fun PostsList(posts: List<VkPost>,
                       modifier: Modifier = Modifier,
                       onShowCommentsClick: (VkPost) -> Unit,
                       onDropPost: (VkPost) -> Unit,

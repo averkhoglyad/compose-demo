@@ -11,7 +11,7 @@ import stepic.vk.layout.view.ProfileView
 import stepic.vk.layout.view.feed.CommentsView
 import stepic.vk.layout.view.feed.PostsView
 import stepic.vk.model.CommentsViewModel
-import stepic.vk.model.PostsFeedViewModel
+import stepic.vk.model.PostsViewModel
 
 object HomeScreen : ModifiableScreen() {
 
@@ -31,7 +31,7 @@ object HomeScreen : ModifiableScreen() {
         @Composable
         override fun Content() {
             val navState = rememberNavState()
-            val model = rememberScreenModel { PostsFeedViewModel(7) }
+            val model = rememberScreenModel { PostsViewModel(7).apply { loadPosts() } }
             PostsView(
                 viewModel = model,
                 modifier = this.modifier,
@@ -90,4 +90,3 @@ fun CurrentScreen(modifier: Modifier) {
     currentScreen?.modifier = modifier
     CurrentScreen()
 }
-

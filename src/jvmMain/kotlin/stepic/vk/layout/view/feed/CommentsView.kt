@@ -21,36 +21,43 @@ fun CommentsView(viewModel: CommentsViewModel,
                  modifier: Modifier = Modifier,
                  onBackClick: () -> Unit = {}) {
 
-    val screenState = viewModel.screenStateState
-    when (val state = screenState.value) {
-        CommentsScreenState.Initial -> {}
+    when (val state = viewModel.screenState) {
+        is CommentsScreenState.Initial -> {}
         is CommentsScreenState.Comments -> {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Text("Comments for Post #${state.post.id}")
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = onBackClick) {
-                                Icon(
-                                    imageVector = Icons.Default.ArrowBack,
-                                    contentDescription = "Back"
-                                )
-                            }
-                        }
-                    )
-                }
-            ) { padding ->
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = modifier
-                        .padding(padding)
-                ) {
-                    items(items = state.comments, key = VkPostComment::id) {
-                        CommentItem(it)
+            CommentsList(state.post, state.comments, modifier, onBackClick)
+        }
+    }
+}
+
+@Composable
+private fun CommentsList(post: VkPost,
+                         comments: List<VkPostComment>,
+                         modifier: Modifier,
+                         onBackClick: () -> Unit) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Comments for Post #${post.id}")
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
                 }
+            )
+        }
+    ) { padding ->
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = modifier
+                .padding(padding)
+        ) {
+            items(items = comments, key = VkPostComment::id) {
+                CommentItem(it)
             }
         }
     }

@@ -1,40 +1,36 @@
 package stepic.vk.model
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.StateScreenModel
 import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
 import stepic.vk.data.VkPostComment
-import stepic.vk.immutable
 import stepic.vk.layout.component.getByType
 import java.net.URI
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-class CommentsViewModel: ScreenModel {
+class CommentsViewModel: StateScreenModel<CommentsScreenState>(CommentsScreenState.Initial) {
 
-    private val _screenStateState = mutableStateOf<CommentsScreenState>(CommentsScreenState.Initial)
-    val screenStateState = _screenStateState.immutable()
-    val screenState: CommentsScreenState by _screenStateState
+    val screenState: CommentsScreenState by state
 
     fun loadComments(post: VkPost) {
-        var inc = 0
-        val comments = generateSequence {
-            VkPostComment(
-                id = ++inc,
-                author = "Somebody",
-                authorAvatar = URI("/vk/author-avatar.png"),
-                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-                publishedAt = Instant.now()
-                    .minus(7, ChronoUnit.HOURS)
-                    .plus(3L * inc, ChronoUnit.MINUTES)
-            )
-        }
+        val comments = generateSequence(1) { it + 1 }
             .take(post.metrics.getByType(MetricType.COMMENTS).value)
+            .map{ id -> generateComment(id)}
             .toList()
-        _screenStateState.value = CommentsScreenState.Comments(post, comments)
+
+        mutableState.value = CommentsScreenState.Comments(post, comments)
     }
+
+    private fun generateComment(id: Int) = VkPostComment(
+        id = id,
+        author = "Somebody",
+        authorAvatar = URI("/vk/author-avatar.png"),
+        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+        publishedAt = Instant.now()
+            .minus(7, ChronoUnit.HOURS)
+            .plus(3L * id, ChronoUnit.MINUTES)
+    )
 }
 
 sealed class CommentsScreenState {
