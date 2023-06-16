@@ -2,6 +2,7 @@ package stepic.vk.model
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import cafe.adriel.voyager.core.model.ScreenModel
 import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
 import stepic.vk.data.VkPostComment
@@ -11,7 +12,7 @@ import java.net.URI
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-class CommentsViewModel(post: VkPost) {
+class CommentsViewModel: ScreenModel {
 
     private val _screenStateState = mutableStateOf<CommentsScreenState>(CommentsScreenState.Initial)
     val screenStateState = _screenStateState.immutable()
@@ -34,7 +35,6 @@ class CommentsViewModel(post: VkPost) {
             .toList()
         _screenStateState.value = CommentsScreenState.Comments(post, comments)
     }
-
 }
 
 sealed class CommentsScreenState {

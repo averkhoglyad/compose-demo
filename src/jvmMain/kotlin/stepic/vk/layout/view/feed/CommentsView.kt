@@ -17,14 +17,11 @@ import stepic.vk.model.CommentsScreenState
 import stepic.vk.model.CommentsViewModel
 
 @Composable
-fun CommentsView(post: VkPost,
+fun CommentsView(viewModel: CommentsViewModel,
                  modifier: Modifier = Modifier,
                  onBackClick: () -> Unit = {}) {
 
-    val viewModel = CommentsViewModel(post)
-    viewModel.loadComments(post)
     val screenState = viewModel.screenStateState
-
     when (val state = screenState.value) {
         CommentsScreenState.Initial -> {}
         is CommentsScreenState.Comments -> {

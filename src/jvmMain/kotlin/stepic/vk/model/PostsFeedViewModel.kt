@@ -2,6 +2,7 @@ package stepic.vk.model
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import cafe.adriel.voyager.core.model.ScreenModel
 import stepic.vk.data.MetricItem
 import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
@@ -10,7 +11,7 @@ import java.net.URI
 import java.time.Instant
 import kotlin.random.Random
 
-class PostsFeedViewModel(count: Int = 3) {
+class PostsFeedViewModel(count: Int = 3): ScreenModel {
 
     private val _screenStateState = mutableStateOf<PostScreenState>(PostScreenState.Initial)
     val screenStateState = _screenStateState.immutable()

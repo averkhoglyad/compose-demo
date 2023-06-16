@@ -11,16 +11,35 @@ import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
 import stepic.vk.layout.component.PostCard
+import stepic.vk.model.PostScreenState
 import stepic.vk.model.PostsFeedViewModel
+
+@Composable
+fun PostsView(viewModel: PostsFeedViewModel,
+              modifier: Modifier = Modifier,
+              onShowCommentsClick: (VkPost) -> Unit = {}) {
+    when (val state = viewModel.screenState) {
+        PostScreenState.Initial -> {}
+        is PostScreenState.Posts ->
+            PostsFeed(
+                posts = state.posts,
+                modifier = modifier,
+                onShowCommentsClick = onShowCommentsClick,
+                onMetricClick = viewModel::incMetric,
+                onDropPost = viewModel::drop)
+    }
+}
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun FeedPost(posts: List<VkPost>,
-             viewModel: PostsFeedViewModel,
-             modifier: Modifier = Modifier,
-             onShowCommentsClick: (VkPost) -> Unit) {
+private fun PostsFeed(posts: List<VkPost>,
+                      modifier: Modifier = Modifier,
+                      onShowCommentsClick: (VkPost) -> Unit,
+                      onDropPost: (VkPost) -> Unit,
+                      onMetricClick: (VkPost, MetricType) -> Unit) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -28,7 +47,7 @@ fun FeedPost(posts: List<VkPost>,
         items(items = posts, key = VkPost::id) { post ->
             val dismissState = rememberDismissState()
             if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-                viewModel.drop(post)
+                onDropPost(post)
             }
 
             SwipeToDismiss(
@@ -39,10 +58,10 @@ fun FeedPost(posts: List<VkPost>,
             ) {
                 PostCard(
                     post = post,
-                    onViewsClick = { viewModel.incMetric(post, it.type) },
+                    onViewsClick = { onMetricClick(post, it.type) },
                     onCommentsClick = { onShowCommentsClick(post) },
-                    onLikeClick = { viewModel.incMetric(post, it.type) },
-                    onSharesClick = { viewModel.incMetric(post, it.type) },
+                    onLikeClick = { onMetricClick(post, it.type) },
+                    onSharesClick = { onMetricClick(post, it.type) },
                 )
             }
         }

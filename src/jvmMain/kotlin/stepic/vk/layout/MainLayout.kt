@@ -17,19 +17,24 @@ import stepic.vk.navigation.rememberNavState
 
 @Composable
 fun MainLayout() {
-    Navigator(screen = HomeScreen, disposeBehavior = NavigatorDisposeBehavior(false, false)) { navigator ->
+    Navigator(
+        screen = HomeScreen,
+        disposeBehavior = NavigatorDisposeBehavior(false, false)
+    ) { navigator ->
         val navState = rememberNavState(navigator)
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background),
             bottomBar = {
-                BottomNavigationMenu(navState.current) {
-                    navState.goToTab(it)
-                }
+                BottomNavigationMenu(
+                    currentScreen = navState.current,
+                    onNavItemClick = { navState.goToTab(it) }
+                )
             },
         ) { paddingValues ->
-            CurrentScreen(Modifier
+            CurrentScreen(
+                modifier = Modifier
                     .padding(paddingValues)
                     .padding(15.dp)
                     .padding(bottom = 10.dp)
@@ -39,8 +44,10 @@ fun MainLayout() {
 }
 
 @Composable
-private fun BottomNavigationMenu(currentScreen: Screen,
-                                 onNavItemClick: (Screen) -> Unit = {}) {
+private fun BottomNavigationMenu(
+    currentScreen: Screen,
+    onNavItemClick: (Screen) -> Unit = {}
+) {
     BottomNavigation {
         BottomNavItems.values()
             .forEach {

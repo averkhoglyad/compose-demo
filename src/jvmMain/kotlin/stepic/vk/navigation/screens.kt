@@ -2,13 +2,16 @@ package stepic.vk.navigation
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.*
 import stepic.vk.data.VkPost
 import stepic.vk.layout.view.FavoritesView
-import stepic.vk.layout.view.HomeView
 import stepic.vk.layout.view.ProfileView
 import stepic.vk.layout.view.feed.CommentsView
+import stepic.vk.layout.view.feed.PostsView
+import stepic.vk.model.CommentsViewModel
+import stepic.vk.model.PostsFeedViewModel
 
 object HomeScreen : ModifiableScreen() {
 
@@ -20,7 +23,7 @@ object HomeScreen : ModifiableScreen() {
             CurrentScreen(this.modifier)
         }
     }
-    
+
     object PostsScreen : ModifiableScreen() {
 
         override val key = "${HomeScreen.key}.PostsScreen"
@@ -28,7 +31,12 @@ object HomeScreen : ModifiableScreen() {
         @Composable
         override fun Content() {
             val navState = rememberNavState()
-            HomeView(modifier = this.modifier, onShowCommentsClick = { navState.goTo(CommentsScreen(it)) })
+            val model = rememberScreenModel { PostsFeedViewModel(7) }
+            PostsView(
+                viewModel = model,
+                modifier = this.modifier,
+                onShowCommentsClick = { navState.goTo(CommentsScreen(it)) }
+            )
         }
     }
 
@@ -39,11 +47,15 @@ object HomeScreen : ModifiableScreen() {
         @Composable
         override fun Content() {
             val navState = rememberNavState()
-            CommentsView(post, modifier = this.modifier, onBackClick = { navState.goBack() })
+            val model = rememberScreenModel { CommentsViewModel().apply { loadComments(post) } }
+            CommentsView(
+                viewModel = model,
+                modifier = this.modifier,
+                onBackClick = { navState.goBack() }
+            )
         }
     }
 }
-
 
 object FavoritesScreen : ModifiableScreen() {
 
