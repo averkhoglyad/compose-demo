@@ -44,9 +44,13 @@ compose.desktop {
 val voyagerVersion = "1.0.0-rc06"
 dependencies {
 //    commonMainImplementation("com.arkivanov.decompose:decompose:1.0.0")
+
     commonMainImplementation("cafe.adriel.voyager:voyager-core-desktop:$voyagerVersion")
     commonMainImplementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
     commonMainImplementation("cafe.adriel.voyager:voyager-bottom-sheet-navigator:$voyagerVersion")
     commonMainImplementation("cafe.adriel.voyager:voyager-tab-navigator:$voyagerVersion")
     commonMainImplementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+
+    commonMainImplementation("com.darkrockstudios:mpfilepicker:1.1.0")
+
 }
