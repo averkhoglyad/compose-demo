@@ -1,8 +1,8 @@
-package stepic.vk.layout.view
+package stepic.vk.representation.view.favorite
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import stepic.vk.layout.component.TextCountable
+import stepic.vk.representation.component.TextCountable
 
 @Composable
 fun FavoritesView(modifier: Modifier = Modifier) {

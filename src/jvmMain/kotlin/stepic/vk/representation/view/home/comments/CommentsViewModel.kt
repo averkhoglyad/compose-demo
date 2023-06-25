@@ -1,10 +1,10 @@
-package stepic.vk.model
+package stepic.vk.representation.view.home.comments
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
 import stepic.vk.data.VkPostComment
-import stepic.vk.layout.component.getByType
+import stepic.vk.representation.view.home.posts.getByType
 import java.net.URI
 import java.time.Instant
 import java.time.temporal.ChronoUnit

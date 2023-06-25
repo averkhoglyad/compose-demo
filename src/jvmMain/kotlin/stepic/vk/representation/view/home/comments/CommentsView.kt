@@ -1,4 +1,4 @@
-package stepic.vk.layout.view.feed
+package stepic.vk.representation.view.home.comments
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
@@ -14,9 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import stepic.vk.data.VkPost
 import stepic.vk.data.VkPostComment
-import stepic.vk.layout.component.CommentItem
-import stepic.vk.model.CommentsScreenState
-import stepic.vk.model.CommentsViewModel
 
 @Composable
 fun CommentsView(viewModel: CommentsViewModel,

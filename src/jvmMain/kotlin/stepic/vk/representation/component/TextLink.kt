@@ -1,4 +1,4 @@
-package stepic.vk.layout.component
+package stepic.vk.representation.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.hoverable

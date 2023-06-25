@@ -1,4 +1,4 @@
-package stepic.vk.model
+package stepic.vk.representation.view.home.posts
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import stepic.vk.data.MetricItem

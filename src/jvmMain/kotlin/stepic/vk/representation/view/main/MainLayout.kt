@@ -1,4 +1,4 @@
-package stepic.vk.layout
+package stepic.vk.representation.view.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,10 +10,9 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
-import stepic.vk.navigation.BottomNavItems
-import stepic.vk.navigation.CurrentScreen
-import stepic.vk.navigation.HomeScreen
+import stepic.vk.navigation.screen.CurrentScreen
 import stepic.vk.navigation.rememberNavState
+import stepic.vk.navigation.screen.HomeScreen
 
 @Composable
 fun MainLayout() {

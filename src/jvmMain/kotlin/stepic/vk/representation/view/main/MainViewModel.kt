@@ -1,4 +1,4 @@
-package stepic.vk.model
+package stepic.vk.representation.view.main
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope

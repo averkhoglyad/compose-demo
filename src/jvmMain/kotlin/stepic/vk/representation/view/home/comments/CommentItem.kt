@@ -1,4 +1,4 @@
-package stepic.vk.layout.component
+package stepic.vk.representation.view.home.comments
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import stepic.vk.data.VkPostComment
-import stepic.vk.data.TIME_FORMATTER
+import stepic.vk.representation.theme.TIME_FORMATTER
 import java.time.ZoneId
 
 @Composable

@@ -6,9 +6,12 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.res.ResourceLoader
 import androidx.compose.ui.res.loadImageBitmap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.AwtWindow
 import androidx.compose.ui.window.FrameWindowScope
@@ -18,8 +21,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.FileDialog
 import java.io.File
+import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 fun main() = application {
     var openUploadWindow by remember { mutableStateOf(false) }
@@ -55,6 +60,7 @@ fun main() = application {
 }
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MainLayout(
     model: ViewModel,
@@ -70,7 +76,7 @@ fun MainLayout(
         ) {
             if (model.image != null) {
                 Image(
-                    painter = BitmapPainter(Files.newInputStream(model.image).use { loadImageBitmap(it) }),
+                    painter = painterResource(model.image.toString(), FileSystemResourceLoader),
                     contentDescription = model.image?.fileName?.toString(),
                     modifier = Modifier.fillMaxSize()
                 )
@@ -86,6 +92,13 @@ fun MainLayout(
         ) {
             Text("Get image")
         }
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+object FileSystemResourceLoader : ResourceLoader {
+    override fun load(resourcePath: String): InputStream {
+        return Files.newInputStream(Paths.get(resourcePath))
     }
 }
 

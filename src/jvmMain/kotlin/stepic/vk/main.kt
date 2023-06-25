@@ -3,8 +3,8 @@ package stepic.vk
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import cafe.adriel.voyager.navigator.Navigator
-import stepic.vk.layout.VkAppTheme
-import stepic.vk.navigation.MainScreen
+import stepic.vk.representation.theme.VkAppTheme
+import stepic.vk.navigation.screen.MainScreen
 import java.awt.Dimension
 
 fun main() = application {

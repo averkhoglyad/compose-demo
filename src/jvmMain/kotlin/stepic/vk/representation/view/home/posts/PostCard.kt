@@ -1,4 +1,4 @@
-package stepic.vk.layout.component
+package stepic.vk.representation.view.home.posts
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import stepic.vk.data.MetricItem
 import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
-import stepic.vk.data.TIME_FORMATTER
+import stepic.vk.representation.theme.TIME_FORMATTER
 import java.time.ZoneId
 
 @Composable

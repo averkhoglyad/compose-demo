@@ -1,4 +1,4 @@
-package stepic.vk.layout.view.feed
+package stepic.vk.representation.view.home.posts
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -15,9 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import stepic.vk.data.MetricType
 import stepic.vk.data.VkPost
-import stepic.vk.layout.component.PostCard
-import stepic.vk.model.PostScreenState
-import stepic.vk.model.PostsViewModel
 
 @Composable
 fun PostsView(viewModel: PostsViewModel,
