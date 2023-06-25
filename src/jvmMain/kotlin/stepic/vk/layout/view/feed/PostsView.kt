@@ -9,6 +9,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import stepic.vk.data.MetricType
@@ -21,7 +23,8 @@ import stepic.vk.model.PostsViewModel
 fun PostsView(viewModel: PostsViewModel,
               modifier: Modifier = Modifier,
               onShowCommentsClick: (VkPost) -> Unit = {}) {
-    when (val state = viewModel.screenState) {
+    val screenState by viewModel.state.collectAsState()
+    when (val state = screenState) {
         is PostScreenState.Initial -> {}
         is PostScreenState.Posts ->
             PostsList(

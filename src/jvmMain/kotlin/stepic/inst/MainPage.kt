@@ -20,6 +20,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.awt.Dimension
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -101,6 +102,7 @@ private fun ScrollToTopFAB(onClick: () -> Unit) {
 fun main() = application {
     val card = InstViewModel()
     Window(onCloseRequest = ::exitApplication) {
+        window.minimumSize = Dimension(600, 400)
         InstProjectTheme {
             MainPage(card)
         }

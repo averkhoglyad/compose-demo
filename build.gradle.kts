@@ -53,4 +53,6 @@ dependencies {
 
     commonMainImplementation("com.darkrockstudios:mpfilepicker:1.1.0")
 
+    commonMainImplementation("com.vk.api:sdk:1.0.14")
+
 }

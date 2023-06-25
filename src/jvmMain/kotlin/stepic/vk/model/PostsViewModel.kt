@@ -10,8 +10,6 @@ import kotlin.random.Random
 
 class PostsViewModel(private val count: Int = 3): StateScreenModel<PostScreenState>(PostScreenState.Initial) {
 
-    val screenState by state
-
     fun loadPosts() {
         val posts = generateSequence(1) { it + 1 }
             .take(count)

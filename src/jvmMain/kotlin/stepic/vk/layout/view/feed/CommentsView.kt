@@ -8,6 +8,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import stepic.vk.data.VkPost
@@ -20,8 +22,8 @@ import stepic.vk.model.CommentsViewModel
 fun CommentsView(viewModel: CommentsViewModel,
                  modifier: Modifier = Modifier,
                  onBackClick: () -> Unit = {}) {
-
-    when (val state = viewModel.screenState) {
+    val screenState by viewModel.state.collectAsState()
+    when (val state = screenState) {
         is CommentsScreenState.Initial -> {}
         is CommentsScreenState.Comments -> {
             CommentsList(state.post, state.comments, modifier, onBackClick)

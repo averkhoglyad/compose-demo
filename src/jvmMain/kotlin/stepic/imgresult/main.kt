@@ -39,7 +39,7 @@ fun main() = application {
                     model.image(it)
                 }
                 ctx.launch {
-                    delay(50)
+                    delay(100)
                     openUploadWindow = false
                 }
             }

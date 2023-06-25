@@ -11,8 +11,6 @@ import java.time.temporal.ChronoUnit
 
 class CommentsViewModel: StateScreenModel<CommentsScreenState>(CommentsScreenState.Initial) {
 
-    val screenState: CommentsScreenState by state
-
     fun loadComments(post: VkPost) {
         val comments = generateSequence(1) { it + 1 }
             .take(post.metrics.getByType(MetricType.COMMENTS).value)
