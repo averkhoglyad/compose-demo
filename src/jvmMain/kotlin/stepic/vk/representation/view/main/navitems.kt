@@ -6,9 +6,9 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import cafe.adriel.voyager.core.screen.Screen
-import stepic.vk.navigation.screen.FavoritesScreen
-import stepic.vk.navigation.screen.HomeScreen
-import stepic.vk.navigation.screen.ProfileScreen
+import stepic.vk.screen.FavoritesScreen
+import stepic.vk.screen.HomeScreen
+import stepic.vk.screen.ProfileScreen
 import kotlin.reflect.KClass
 
 interface NavItem {

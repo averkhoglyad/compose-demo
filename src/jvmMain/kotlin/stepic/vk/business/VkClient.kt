@@ -2,35 +2,16 @@ package stepic.vk.business
 
 import com.vk.api.sdk.client.VkApiClient
 import com.vk.api.sdk.client.actors.UserActor
-import com.vk.api.sdk.httpclient.HttpTransportClient
 import org.apache.http.client.utils.URIBuilder
 import java.net.URI
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
-import java.util.Properties
 
-private const val clientIdProperty = "vk.clientId"
-private const val clientSecretProperty = "vk.clientSecret"
 
-class VkClient {
-
-    private val vk = VkApiClient(HttpTransportClient())
-
-    private val clientId: Int
-    private val clientSecret: String
-    private val redirectUrl: String
-
-    init {
-        // TODO: Replace loading, use constructor params
-        val properties = Properties()
-        properties.load(javaClass.getResourceAsStream("/vk/application.properties"))
-        clientId = properties.getProperty(clientIdProperty).toInt()
-        clientSecret = properties.getProperty(clientSecretProperty)
-        redirectUrl =  URIBuilder(vk.oAuthEndpoint)
-            .setPath("blank.html")
-            .build()
-            .toString()
-    }
+class VkClient(private val vk: VkApiClient,
+               private val clientId: Int,
+               private val clientSecret: String,
+               private val redirectUrl: String) {
 
     fun buildLoginUrl(): URI {
         return URIBuilder(vk.oAuthEndpoint)

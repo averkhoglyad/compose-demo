@@ -1,4 +1,4 @@
-package stepic.vk.navigation.screen
+package stepic.vk.screen
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier

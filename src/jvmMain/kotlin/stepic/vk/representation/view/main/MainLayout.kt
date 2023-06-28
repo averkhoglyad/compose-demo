@@ -10,15 +10,15 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
-import stepic.vk.navigation.screen.CurrentScreen
+import stepic.vk.screen.CurrentScreen
 import stepic.vk.navigation.rememberNavState
-import stepic.vk.navigation.screen.HomeScreen
+import stepic.vk.screen.HomeScreen
 
 @Composable
 fun MainLayout() {
     Navigator(
         screen = HomeScreen,
-        disposeBehavior = NavigatorDisposeBehavior(false, false)
+        disposeBehavior = NavigatorDisposeBehavior(disposeNestedNavigators = false, disposeSteps = false)
     ) { navigator ->
         val navState = rememberNavState(navigator)
         Scaffold(

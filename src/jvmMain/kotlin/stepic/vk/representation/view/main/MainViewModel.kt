@@ -7,17 +7,18 @@ import com.vk.api.sdk.client.actors.UserActor
 import com.vk.api.sdk.httpclient.HttpTransportClient
 import kotlinx.coroutines.launch
 import org.apache.http.client.utils.URIBuilder
+import org.koin.compose.koinInject
+import org.koin.java.KoinJavaComponent
 import stepic.vk.business.VkClient
+import stepic.vk.util.di
 import java.awt.Desktop
 import java.net.URI
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
-
 class MainViewModel : StateScreenModel<AuthState>(AuthState.Unauthorized) {
 
-    // TODO: Replace instantiation with DI
-    private val vkClient = VkClient()
+    private val vkClient by di<VkClient>()
 
     fun requestLogin() {
         val loginUrl = vkClient.buildLoginUrl()
